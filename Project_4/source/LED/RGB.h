@@ -19,7 +19,7 @@
 
 #ifndef SRC_LED_RGB_H_
 #define SRC_LED_RGB_H_
-
+#define FREEDOM
 #include <stdbool.h>
 #include <stdint.h>
 #ifdef FREEDOM
