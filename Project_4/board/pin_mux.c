@@ -44,8 +44,10 @@ BOARD_InitPins:
   - {pin_num: '53', peripheral: GPIOB, signal: 'GPIO, 18', pin_signal: TSI0_CH11/PTB18/TPM2_CH0, direction: OUTPUT}
   - {pin_num: '54', peripheral: GPIOB, signal: 'GPIO, 19', pin_signal: TSI0_CH12/PTB19/TPM2_CH1, direction: OUTPUT}
   - {pin_num: '74', peripheral: GPIOD, signal: 'GPIO, 1', pin_signal: ADC0_SE5b/PTD1/SPI0_SCK/TPM0_CH1, direction: OUTPUT}
-  - {pin_num: '24', peripheral: I2C0, signal: SCL, pin_signal: PTE24/TPM0_CH0/I2C0_SCL}
-  - {pin_num: '25', peripheral: I2C0, signal: SDA, pin_signal: PTE25/TPM0_CH1/I2C0_SDA}
+  - {pin_num: '24', peripheral: n/a, signal: disabled, pin_signal: PTE24/TPM0_CH0/I2C0_SCL, identifier: ''}
+  - {pin_num: '25', peripheral: n/a, signal: disabled, pin_signal: PTE25/TPM0_CH1/I2C0_SDA, identifier: ''}
+  - {pin_num: '43', peripheral: I2C0, signal: SCL, pin_signal: ADC0_SE8/TSI0_CH0/PTB0/LLWU_P5/I2C0_SCL/TPM1_CH0}
+  - {pin_num: '44', peripheral: I2C0, signal: SDA, pin_signal: ADC0_SE9/TSI0_CH6/PTB1/I2C0_SDA/TPM1_CH1}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -66,6 +68,8 @@ void BOARD_InitPins(void)
     CLOCK_EnableClock(kCLOCK_PortD);
     /* Port E Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortE);
+    CLOCK_EnableClock(kCLOCK_I2c0);
+
 
     gpio_pin_config_t LED_RED_config = {
         .pinDirection = kGPIO_DigitalOutput,
@@ -94,6 +98,12 @@ void BOARD_InitPins(void)
     /* PORTA2 (pin 28) is configured as UART0_TX */
     PORT_SetPinMux(BOARD_INITPINS_DEBUG_UART_TX_PORT, BOARD_INITPINS_DEBUG_UART_TX_PIN, kPORT_MuxAlt2);
 
+    /* PORTB0 (pin 43) is configured as I2C0_SCL */
+    PORT_SetPinMux(PORTB, 0U, kPORT_MuxAlt2);
+
+    /* PORTB1 (pin 44) is configured as I2C0_SDA */
+    PORT_SetPinMux(PORTB, 1U, kPORT_MuxAlt2);
+
     /* PORTB18 (pin 53) is configured as PTB18 */
     PORT_SetPinMux(BOARD_INITPINS_LED_RED_PORT, BOARD_INITPINS_LED_RED_PIN, kPORT_MuxAsGpio);
 
@@ -103,11 +113,11 @@ void BOARD_InitPins(void)
     /* PORTD1 (pin 74) is configured as PTD1 */
     PORT_SetPinMux(BOARD_INITPINS_LED_BLUE_PORT, BOARD_INITPINS_LED_BLUE_PIN, kPORT_MuxAsGpio);
 
-    /* PORTE24 (pin 24) is configured as I2C0_SCL */
-    PORT_SetPinMux(BOARD_INITPINS_ACCEL_SCL_PORT, BOARD_INITPINS_ACCEL_SCL_PIN, kPORT_MuxAlt5);
+    /* PORTE24 (pin 24) is disabled */
+    PORT_SetPinMux(PORTE, 24U, kPORT_PinDisabledOrAnalog);
 
-    /* PORTE25 (pin 25) is configured as I2C0_SDA */
-    PORT_SetPinMux(BOARD_INITPINS_ACCEL_SDA_PORT, BOARD_INITPINS_ACCEL_SDA_PIN, kPORT_MuxAlt5);
+    /* PORTE25 (pin 25) is disabled */
+    PORT_SetPinMux(PORTE, 25U, kPORT_PinDisabledOrAnalog);
 
     SIM->SOPT5 = ((SIM->SOPT5 &
                    /* Mask bits to zero which are setting */

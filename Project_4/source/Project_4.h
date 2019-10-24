@@ -29,6 +29,7 @@
 #include "fsl_debug_console.h"
 #include "LED/RGB.h"
 #include "Logger/logger.h"
+#include "I2C/I2C.h"
 
 #define RED_BASE GPIOB
 #define RED_PIN 18U

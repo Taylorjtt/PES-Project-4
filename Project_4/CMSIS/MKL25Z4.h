@@ -1632,15 +1632,15 @@ typedef struct {
 
 /* I2C - Peripheral instance base addresses */
 /** Peripheral I2C0 base address */
-#define I2C0_BASE                                (0x40066000u)
+#define I2C0_BASE_ADDRESS                                (0x40066000u)
 /** Peripheral I2C0 base pointer */
-#define I2C0                                     ((I2C_Type *)I2C0_BASE)
+#define I2C0                                     ((I2C_Type *)I2C0_BASE_ADDRESS)
 /** Peripheral I2C1 base address */
 #define I2C1_BASE                                (0x40067000u)
 /** Peripheral I2C1 base pointer */
 #define I2C1                                     ((I2C_Type *)I2C1_BASE)
 /** Array initializer of I2C peripheral base addresses */
-#define I2C_BASE_ADDRS                           { I2C0_BASE, I2C1_BASE }
+#define I2C_BASE_ADDRS                           { I2C0_BASE_ADDRESS, I2C1_BASE }
 /** Array initializer of I2C peripheral base pointers */
 #define I2C_BASE_PTRS                            { I2C0, I2C1 }
 /** Interrupt vectors for the I2C peripheral type */
