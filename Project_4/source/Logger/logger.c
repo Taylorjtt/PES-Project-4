@@ -48,7 +48,7 @@ LOGGER_STATUS Logger_status(LoggerHandle handle)
 	LOGGERObject *obj = (LOGGERObject *)handle;
 	return obj->status;
 }
-void Logger_logData(LoggerHandle handle, uint8_t* loc, size_t length)
+void Logger_logData(LoggerHandle handle, uint8_t* loc, size_t length,const char* function, LOG_LEVEL level)
 {
 	LOGGERObject *obj = (LOGGERObject *)handle;
 	if(obj->status == ENABLED)
@@ -57,7 +57,8 @@ void Logger_logData(LoggerHandle handle, uint8_t* loc, size_t length)
 		{
 			uintptr_t address = (uintptr_t)(loc + i);
 			#ifdef FREEDOM
-			PRINTF("LOGGER: Address: %02X\tData:%X\n\r",address,loc[i]);
+			PRINTF("November 1, 2019 6:00:03 %s()\n\r",function);
+			PRINTF("%s: Address: %02X\tData:%X\n\r",getLevelString(level),address,loc[i]);
 			#else
 			printf("LOGGER: Address: %02X\tData:%X\n\r",(uint32_t)address,loc[i]);
 			#endif
@@ -69,19 +70,42 @@ void Logger_logData(LoggerHandle handle, uint8_t* loc, size_t length)
 		#endif
 	}
 }
-void Logger_logString(LoggerHandle handle, const char * string)
+void Logger_logString(LoggerHandle handle, const char * string,const char* function, LOG_LEVEL level)
 {
 	LOGGERObject *obj = (LOGGERObject *)handle;
 	if(obj->status == ENABLED)
 	{
-		printf("LOGGER: %s\n\r",string);
+		PRINTF("November 1, 2019 6:00:03 %s()\n\r",function);
+		PRINTF("%s: %s\n\r",getLevelString(level),string);
 	}
 }
-void Logger_logInt(LoggerHandle handle, uint8_t num)
+void Logger_logInt(LoggerHandle handle, uint8_t num,const char* function, LOG_LEVEL level)
 {
 	LOGGERObject *obj = (LOGGERObject *)handle;
 	if(obj->status == ENABLED)
 	{
-		printf("LOGGER: %d\n\r",num);
+		PRINTF("November 1, 2019 6:00:03 %s()\n\r",function);
+		PRINTF("%s: %d\n\r",getLevelString(level),num);
+	}
+}
+const char* getLevelString(LOG_LEVEL level)
+{
+	switch(level)
+	{
+		case TEST_LEVEL:
+		{
+			return "TEST\0";
+			break;
+		}
+		case DEBUG_LEVEL:
+		{
+			return "DEBUG\0";
+			break;
+		}
+		case STATUS_LEVEL:
+		{
+			return "STATUS\0";
+			break;
+		}
 	}
 }

@@ -19,6 +19,7 @@
 
 #ifndef LOGGER_LOGGER_H_
 #define LOGGER_LOGGER_H_
+#define FREEDOM
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -26,6 +27,7 @@
 #include "fsl_debug_console.h"
 #endif
 typedef enum {DISABLED,ENABLED}LOGGER_STATUS;
+typedef enum {TEST_LEVEL,DEBUG_LEVEL,STATUS_LEVEL}LOG_LEVEL;
 
 typedef struct LOGGER_OBJ
 {
@@ -71,20 +73,21 @@ LOGGER_STATUS Logger_status(LoggerHandle handle);
 * @param loc		memory location
 * @param length		length in bytes of memory chunk
 */
-void Logger_logData(LoggerHandle handle, uint8_t* loc, size_t length);
+void Logger_logData(LoggerHandle handle, uint8_t* loc, size_t length,const char* function, LOG_LEVEL level);
 /**
 * @brief Log a string
 *
 * @param handle		logger object handle
 * @param string		string to log
 */
-void Logger_logString(LoggerHandle handle, const char * string);
+void Logger_logString(LoggerHandle handle, const char * string, const char* function,LOG_LEVEL level);
 /**
 * @brief Log an integer
 *
 * @param handle		logger object handle
 * @param string		int to log
 */
-void Logger_logInt(LoggerHandle handle, uint8_t num);
+void Logger_logInt(LoggerHandle handle, uint8_t num, const char* function,LOG_LEVEL level);
 
+const char* getLevelString(LOG_LEVEL);
 #endif /* LOGGER_LOGGER_H_ */

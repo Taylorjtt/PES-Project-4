@@ -24,6 +24,10 @@ int main(void) {
 
 	logger = malloc(sizeof(LOGGERObject));
 	logger = Logger_Constructor((void*)logger, sizeof(LoggerHandle));
+	Logger_enable(logger);
+	Logger_logInt(logger, 10, "myFunction", DEBUG_LEVEL);
+	Logger_logString(logger, "Testing Logging", "foo",TEST_LEVEL);
+	Logger_logString(logger, "Test Status", "test_status",STATUS_LEVEL);
 
 
 
