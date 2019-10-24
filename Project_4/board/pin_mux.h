@@ -61,6 +61,18 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_LED_BLUE_PIN 1U     /*!<@brief PORTD pin index: 1 */
                                            /* @} */
 
+/*! @name PORTE24 (number 24), U7[4]/I2C0_SCL
+  @{ */
+#define BOARD_INITPINS_ACCEL_SCL_PORT PORTE /*!<@brief PORT device name: PORTE */
+#define BOARD_INITPINS_ACCEL_SCL_PIN 24U    /*!<@brief PORTE pin index: 24 */
+                                            /* @} */
+
+/*! @name PORTE25 (number 25), U7[6]/I2C0_SDA
+  @{ */
+#define BOARD_INITPINS_ACCEL_SDA_PORT PORTE /*!<@brief PORT device name: PORTE */
+#define BOARD_INITPINS_ACCEL_SDA_PIN 25U    /*!<@brief PORTE pin index: 25 */
+                                            /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
