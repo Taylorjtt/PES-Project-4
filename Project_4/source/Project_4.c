@@ -9,6 +9,7 @@
 LoggerHandle logger;
 RGBLEDHandle led;
 I2CHandle i2c;
+TMP102Handle tmp;
 
 int main(void) {
 
@@ -24,24 +25,22 @@ int main(void) {
 	RGBLED_set(led, false, false, false);
 
 	logger = malloc(sizeof(LOGGERObject));
-	logger = Logger_Constructor((void*)logger, sizeof(LoggerHandle));
+	logger = Logger_Constructor((void*)logger, sizeof(LOGGERObject));
 	Logger_enable(logger);
 
 	i2c = I2C_init((void*)I2C_0_BASE_ADDRESS, sizeof(I2C_OBJ));
-	I2C_command(i2c, 0x70, 0x21);
-	I2C_command(i2c, 0x70, 0x81);
-	I2C_command(i2c, 0x70, (0xE0 | 0xF));
 
-	I2C_start(i2c, 0x70);
-	I2C_write(i2c, 0x0);
+	tmp = malloc(sizeof(TMP102_OBJ));
+	tmp = TMP102_Constructor((void *)tmp, sizeof(RGBLEDObject), i2c, 0x48);
 
-	for(int i = 0; i <8; i++)
-	{
-		I2C_write(i2c, 0xAA);
-		I2C_write(i2c, 0xFF);
-	}
 
-	I2C_stop(i2c);
+	TMP102_wakeup(tmp);
+
+	float temperature = TMP102_readTemp(tmp);
+
+	PRINTF("Temperature:%f",temperature);
+
+
 
 
 

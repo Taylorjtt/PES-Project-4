@@ -29,7 +29,7 @@ __STATIC_INLINE void I2C_WaitWhileBusy()
 	while((I2C0->S & I2C_S_BUSY_MASK)!=0) {}
 }
 #define I2C_WRITE_ADDRESS(slaveAddress) 	((uint8_t)((slaveAddress << 1) | 0))
-
+#define I2C_READ_ADDRESS(slaveAddress) 	((uint8_t)((slaveAddress << 1) | 1))
 #define I2C_ENABLE_BIT 1 << 7
 #define I2C_IR_ENABLE_BIT 1 << 6
 #define I2C_MODE_BIT 1 << 5
@@ -73,6 +73,11 @@ void I2C_writeBytes(I2CHandle handle, uint8_t address,uint8_t reg,uint8_t* data,
 void I2C_start(I2CHandle handle, uint8_t address);
 void I2C_stop(I2CHandle handle);
 void I2C_write(I2CHandle handle,uint8_t data);
-
+void I2C_ReadRegisters(I2CHandle handle, uint8_t address,uint8_t startRegisterAddress, uint8_t registerCount, uint8_t*  buffer);
+uint8_t I2C_readRegister(I2CHandle handle, uint8_t address, uint8_t registerAddress);
+void I2C_sendRepeatedStart(I2CHandle handle);
+void I2C_EnterReceiveModeWithoutAck(I2CHandle handle);
+uint8_t I2C_driveClock(I2CHandle handle);
+void I2C_DisableAck(I2CHandle handle);
 
 #endif /* I2C_I2C_H_ */
