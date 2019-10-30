@@ -19,6 +19,7 @@ int main(void) {
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
     BOARD_InitDebugConsole();
+    PRINTF("\n\r");
 
 	led = malloc(sizeof(RGBLEDObject));
 	led = RGBLED_Constructor((void*) led, sizeof(RGBLEDObject), RED_BASE, RED_PIN, GREEN_BASE, GREEN_PIN, BLUE_BASE, BLUE_PIN);
@@ -38,7 +39,7 @@ int main(void) {
 
 	float temperature = TMP102_readTemp(tmp);
 
-	PRINTF("Temperature:%f",temperature);
+	PRINTF("Temperature:%f\n\r",temperature);
 
 
 

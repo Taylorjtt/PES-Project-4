@@ -121,6 +121,12 @@ float TMP102_readHighTemp(TMP102Handle handle)
 void TMP102_setConversionRate(TMP102Handle handle,CONVERSION_RATE conversionRate)
 {
 	TMP102_OBJ *tmp = (TMP102_OBJ *)handle;
+	uint8_t rate = conversionRate & 0x3;
+	uint8_t buffer[2] = {0x00,0x00};
+	TMP102_readRegister(handle, CONFIG_REGISTER, buffer);
+	buffer[1] &= 0x3F;
+	buffer[1] |= rate<<6;
+	I2C_writeBytes(tmp->i2cHandle, tmp->address, CONFIG_REGISTER, buffer, 2);
 
 }
 void TMP102_setExtendedMode(TMP102Handle handle, EXTENDED_MODE extendedMode)
