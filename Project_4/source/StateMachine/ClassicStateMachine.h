@@ -18,6 +18,11 @@ typedef struct _CSM_OBJ_
 {
 	STATE currentState;
 	LoggerHandle logger;
+	uint16_t averageCount;
+	float average;
+	float currentTemp;
+	uint8_t timoutCount;
+
 }CSM_OBJ;
 typedef struct _CSM_OBJ_ *CSMHandle;
 

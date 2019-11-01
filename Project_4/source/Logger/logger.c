@@ -79,6 +79,7 @@ void Logger_logString(LoggerHandle handle, const char * string,const char* funct
 		PRINTF("%s: %s\n\r\n\r",getLevelString(level),string);
 	}
 }
+
 void Logger_logInt(LoggerHandle handle, uint8_t num,const char* function, LOG_LEVEL level)
 {
 	LOGGERObject *obj = (LOGGERObject *)handle;
