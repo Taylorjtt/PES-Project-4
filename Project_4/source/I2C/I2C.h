@@ -1,13 +1,13 @@
 /*****************************************************************************
-* Copyright (C) 2019 by John Taylor
-*
-* Redistribution, modification or use of this software in source or binary
-* forms is permitted as long as the files maintain this copyright. Users are
-* permitted to modify this and use it to learn about the field of embedded
-* software. John Taylor and the University of Colorado are not liable for
-* any misuse of this material.
-*
-*****************************************************************************/
+ * Copyright (C) 2019 by John Taylor
+ *
+ * Redistribution, modification or use of this software in source or binary
+ * forms is permitted as long as the files maintain this copyright. Users are
+ * permitted to modify this and use it to learn about the field of embedded
+ * software. John Taylor and the University of Colorado are not liable for
+ * any misuse of this material.
+ *
+ *****************************************************************************/
 /*
  * @file I2C.h
  * @I2C peripherial controller for the KL25Z board
@@ -20,6 +20,7 @@
 #define I2C_I2C_H_
 #include <stdint.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include "CMSIS/MKL25Z4.h"
 #define I2C_0_BASE_ADDRESS (0x40066000u)
 #define I2C_1_BASE_ADDRESS (0x40067000u)
@@ -45,7 +46,6 @@ __STATIC_INLINE void I2C_WaitWhileBusy()
 
 #define I2C_DRIVE_BIT 1 << 5
 
-
 #define FREQUENCY_ICR(x)  (x) & (0x3F)
 #define FREQUENCY_MULT(x)  (x << 6) & (0xC0)
 
@@ -64,22 +64,25 @@ typedef struct _I2C_Obj_
 	__IO uint8_t SLTH;
 	__IO uint8_t SLTL;
 
+
 }I2C_OBJ;
 
 typedef struct _I2C_Obj_ *I2CHandle;
 I2CHandle I2C_init(void *pmemory, const size_t numBytes);
 void I2C_command(I2CHandle handle, uint8_t address,uint8_t data);
 void I2C_writeByte(I2CHandle handle, uint8_t address,uint8_t reg,uint8_t data);
-void I2C_writeBytes(I2CHandle handle, uint8_t address,uint8_t reg,uint8_t* data, size_t length);
+bool I2C_writeBytes(I2CHandle handle, uint8_t address,uint8_t reg,uint8_t* data, size_t length);
 void I2C_start(I2CHandle handle, uint8_t address);
 void I2C_stop(I2CHandle handle);
+
 void I2C_write(I2CHandle handle,uint8_t data);
-void I2C_ReadRegisters(I2CHandle handle, uint8_t address,uint8_t startRegisterAddress, uint8_t registerCount, uint8_t*  buffer);
+bool I2C_ReadRegisters(I2CHandle handle, uint8_t address,uint8_t startRegisterAddress, uint8_t registerCount, uint8_t*  buffer);
 uint8_t I2C_readRegister(I2CHandle handle, uint8_t address, uint8_t registerAddress);
 void I2C_sendRepeatedStart(I2CHandle handle);
 void I2C_EnterReceiveModeWithoutAck(I2CHandle handle);
 uint8_t I2C_driveClock(I2CHandle handle);
 void I2C_DisableAck(I2CHandle handle);
 void I2C_EnterReceiveModeWithAck(I2CHandle handle);
+bool I2C_wait(I2CHandle handle);
 
 #endif /* I2C_I2C_H_ */

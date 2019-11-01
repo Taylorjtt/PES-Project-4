@@ -57,16 +57,16 @@ void Logger_logData(LoggerHandle handle, uint8_t* loc, size_t length,const char*
 		{
 			uintptr_t address = (uintptr_t)(loc + i);
 			#ifdef FREEDOM
-			PRINTF("November 1, 2019 6:00:03 %s()\n\r",function);
+			PRINTF("November 1, 2019 6:00:03 In function %s()\n\r",function);
 			PRINTF("%s: Address: %02X\tData:%X\n\r",getLevelString(level),address,loc[i]);
 			#else
 			printf("LOGGER: Address: %02X\tData:%X\n\r",(uint32_t)address,loc[i]);
 			#endif
 		}
 		#ifdef FREEDOM
-			PRINTF("\n\r");
+			PRINTF("\n\r\n\r");
 		#else
-			printf("\n\r");
+			printf("\n\r\n\r");
 		#endif
 	}
 }
@@ -75,8 +75,8 @@ void Logger_logString(LoggerHandle handle, const char * string,const char* funct
 	LOGGERObject *obj = (LOGGERObject *)handle;
 	if(obj->status == ENABLED)
 	{
-		PRINTF("November 1, 2019 6:00:03 %s()\n\r",function);
-		PRINTF("%s: %s\n\r",getLevelString(level),string);
+		PRINTF("November 1, 2019 6:00:03 In function %s()\n\r",function);
+		PRINTF("%s: %s\n\r\n\r",getLevelString(level),string);
 	}
 }
 void Logger_logInt(LoggerHandle handle, uint8_t num,const char* function, LOG_LEVEL level)
@@ -84,8 +84,8 @@ void Logger_logInt(LoggerHandle handle, uint8_t num,const char* function, LOG_LE
 	LOGGERObject *obj = (LOGGERObject *)handle;
 	if(obj->status == ENABLED)
 	{
-		PRINTF("November 1, 2019 6:00:03 %s()\n\r",function);
-		PRINTF("%s: %d\n\r",getLevelString(level),num);
+		PRINTF("November 1, 2019 6:00:03 In function %s()\n\r",function);
+		PRINTF("%s: %d\n\r\n\r",getLevelString(level),num);
 	}
 }
 const char* getLevelString(LOG_LEVEL level)

@@ -54,8 +54,9 @@ void I2C_start(I2CHandle handle, uint8_t address)
 	//send address
 	i2c->DATA = I2C_WRITE_ADDRESS(address);
 	//wait for ack
-	I2C_WAIT
+	I2C_wait(handle);
 }
+
 void I2C_stop(I2CHandle handle)
 {
 	I2C_OBJ *i2c = (I2C_OBJ *)handle;
@@ -68,7 +69,7 @@ void I2C_write(I2CHandle handle, uint8_t data)
 	//send data
 	i2c->DATA = data;
 	//wait
-	I2C_WAIT
+	I2C_wait(handle);
 }
 void I2C_command(I2CHandle handle, uint8_t address,uint8_t data)
 {
@@ -77,7 +78,7 @@ void I2C_command(I2CHandle handle, uint8_t address,uint8_t data)
 	//send data
 	i2c->DATA = data;
 	//wait
-	I2C_WAIT
+	I2C_wait(handle);
 	//stop
 	I2C_stop(handle);
 }
@@ -90,36 +91,37 @@ void I2C_writeByte(I2CHandle handle, uint8_t address,uint8_t reg,uint8_t data)
 	//send register addresss
 	i2c->DATA = reg;
 	//wait
-	I2C_WAIT
+	I2C_wait(handle);
 	//send data
 	i2c->DATA = data;
 	//wait
-	I2C_WAIT
+	I2C_wait(handle);
 
 	//stop
 	I2C_stop(handle);
 }
 
-void I2C_writeBytes(I2CHandle handle, uint8_t address,uint8_t reg,uint8_t* data, size_t length)
+bool I2C_writeBytes(I2CHandle handle, uint8_t address,uint8_t reg,uint8_t* data, size_t length)
 {
 	I2C_OBJ *i2c = (I2C_OBJ *)handle;
 	I2C_start(handle, address);
-
+	bool ret = false;
 	//send register addresss
 	i2c->DATA = reg;
 	//wait
-	I2C_WAIT
+	ret = I2C_wait(handle);
 	//send data
 	for(int i = 0; i < length; i++)
 	{
 		i2c->DATA = data[i];
 		//wait
-		I2C_WAIT
+		ret = I2C_wait(handle);
 
 	}
 
 	//stop
 	I2C_stop(handle);
+	return ret;
 }
 uint8_t I2C_readRegister(I2CHandle handle, uint8_t address, uint8_t registerAddress)
 {
@@ -127,11 +129,11 @@ uint8_t I2C_readRegister(I2CHandle handle, uint8_t address, uint8_t registerAddr
 	I2C_start(handle, address);
 
 	i2c->DATA = registerAddress;
-	I2C_WAIT
+	I2C_wait(handle);
 
 	I2C_sendRepeatedStart(handle);
 	i2c->DATA = I2C_READ_ADDRESS(address);
-	I2C_WAIT
+	I2C_wait(handle);
 
 	I2C_EnterReceiveModeWithoutAck(handle);
 
@@ -141,17 +143,42 @@ uint8_t I2C_readRegister(I2CHandle handle, uint8_t address, uint8_t registerAddr
 	return i2c->DATA;
 
 }
-void I2C_ReadRegisters(I2CHandle handle, uint8_t address,uint8_t startRegisterAddress, uint8_t registerCount, uint8_t*  buffer)
+bool I2C_wait(I2CHandle handle)
+{
+	I2C_OBJ *i2c = (I2C_OBJ *)handle;
+	bool connected = false;
+	uint32_t i = 0;
+	while((i2c->STATUS & I2C_S_IICIF_MASK) == 0)
+	{
+		i++;
+		if(i > 100000)
+		{
+			break;
+		}
+	}
+	if(i > 100000)
+	{
+		connected = false;
+	}
+	else
+	{
+		connected = true;
+	}
+	i2c->STATUS |= I2C_S_IICIF_MASK;
+	return connected;
+}
+bool I2C_ReadRegisters(I2CHandle handle, uint8_t address,uint8_t startRegisterAddress, uint8_t registerCount, uint8_t*  buffer)
 {
 	I2C_OBJ *i2c = (I2C_OBJ *)handle;
 	I2C_start(handle, address);
+	bool connected = false;
 
 	i2c->DATA = startRegisterAddress;
-	I2C_WAIT
+	connected = I2C_wait(handle);
 
 	I2C_sendRepeatedStart(handle);
 	i2c->DATA = I2C_READ_ADDRESS(address);
-	I2C_WAIT
+	connected = I2C_wait(handle);
 
 	I2C_EnterReceiveModeWithAck(handle);
 
@@ -163,16 +190,17 @@ void I2C_ReadRegisters(I2CHandle handle, uint8_t address,uint8_t startRegisterAd
 	{
 		uint8_t value = i2c->DATA;
 		buffer[index++] = value;
-		I2C_WAIT
+		connected = I2C_wait(handle);
 	}
 
 	I2C_DisableAck(handle);
 	buffer[index++] = i2c->DATA;
 
-	I2C_WAIT
+	connected = I2C_wait(handle);
 
 	I2C_stop(handle);
 	buffer[index++] = i2c->DATA;
+	return connected;
 
 
 }
@@ -186,7 +214,7 @@ uint8_t I2C_driveClock(I2CHandle handle)
 	I2C_OBJ *i2c = (I2C_OBJ *)handle;
 	uint8_t data = i2c->DATA;
 
-	I2C_WAIT
+	I2C_wait(handle);
 
 	return data;
 }

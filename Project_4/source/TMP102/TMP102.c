@@ -18,7 +18,7 @@
  */
 #include "TMP102.h"
 //https://www.sparkfun.com/products/13314
-TMP102Handle TMP102_Constructor(void * pmemory, const size_t numBytes,I2CHandle i2cHandle, uint16_t address)
+TMP102Handle TMP102_Constructor(void * pmemory, const size_t numBytes,I2CHandle i2cHandle, uint16_t address, LoggerHandle logger)
 {
 	TMP102Handle handle;
 	if(numBytes < sizeof(TMP102_OBJ))
@@ -29,6 +29,7 @@ TMP102Handle TMP102_Constructor(void * pmemory, const size_t numBytes,I2CHandle 
 	TMP102_OBJ *tmp = (TMP102_OBJ *)handle;
 	tmp->i2cHandle = i2cHandle;
 	tmp->address = address;
+	tmp->logger = logger;
 
 	return handle;
 
@@ -38,14 +39,36 @@ void TMP102_openPointerRegister(TMP102Handle handle,uint8_t pointerRegister)
 	TMP102_OBJ *tmp = (TMP102_OBJ *)handle;
 	I2C_command(tmp->i2cHandle,tmp->address, pointerRegister);
 }
-void TMP102_readRegister(TMP102Handle handle,uint8_t registerAddress,uint8_t * buffer)
+bool TMP102_readRegister(TMP102Handle handle,uint8_t registerAddress,uint8_t * buffer)
 {
 	TMP102_OBJ *tmp = (TMP102_OBJ *)handle;
-	I2C_ReadRegisters(tmp->i2cHandle, tmp->address, registerAddress, 2, buffer);
+	if(I2C_ReadRegisters(tmp->i2cHandle, tmp->address, registerAddress, 2, buffer))
+	{
+		#ifdef DEBUG
+		char str[100];
+		snprintf(str, sizeof(str),"Register address 0x%X:\tHigh: 0x%X Low:0x%X",registerAddress,buffer[1],buffer[0]);
+		Logger_logString(tmp->logger, str, "TMP102_readRegister", DEBUG_LEVEL);
+		#endif
+		return true;
+	}
+	else
+	{
+		#ifdef DEBUG
+		Logger_logString(tmp->logger, "Timed out waiting for ACK", "TMP102_readRegister", DEBUG_LEVEL);
+		#endif
+		return false;
+	}
+}
+bool TMP102_isConnected(TMP102Handle handle)
+{
+
+	uint8_t buffer[2];
+	return TMP102_readRegister(handle, CONFIG_REGISTER, buffer);
+
 }
 float TMP102_readTemp(TMP102Handle handle)
 {
-	TMP102_OBJ *tmp = (TMP102_OBJ *)handle;
+
 	int16_t temp;
 	uint8_t buffer[2];
 	TMP102_readRegister(handle, TEMPERATURE_REGISTER, buffer);

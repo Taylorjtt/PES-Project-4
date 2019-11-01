@@ -6,19 +6,26 @@
 
 #include "Project_4.h"
 
+//#define TEST
+#define DEBUG
+#define TMP102_ADDRESS 0x48
 LoggerHandle logger;
 RGBLEDHandle led;
 I2CHandle i2c;
 TMP102Handle tmp;
+CSMHandle stateMachine;
+
+
 
 int main(void) {
-
-
-  	/* Init board hardware. */
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
     BOARD_InitDebugConsole();
+    /*
+     * The board is running at 48MZ therefore 480 ticks equals 10 microsecond
+     */
+    SysTick_Config(480);
     PRINTF("\n\r");
 
 	led = malloc(sizeof(RGBLEDObject));
@@ -32,24 +39,46 @@ int main(void) {
 	i2c = I2C_init((void*)I2C_0_BASE_ADDRESS, sizeof(I2C_OBJ));
 
 	tmp = malloc(sizeof(TMP102_OBJ));
-	tmp = TMP102_Constructor((void *)tmp, sizeof(TMP102_OBJ), i2c, 0x48);
+	tmp = TMP102_Constructor((void *)tmp, sizeof(TMP102_OBJ), i2c, TMP102_ADDRESS, logger);
+	stateMachine = malloc(sizeof(CSM_OBJ));
+	stateMachine = CSM_Contstructor((void *)stateMachine, sizeof(CSM_OBJ), logger);
 
+#ifdef TEST
+	testTMP();
+#else
 
-	TMP102_wakeup(tmp);
+	if(POST())
+	{
+		Logger_logString(logger, "POST Passed", "main", STATUS_LEVEL);
 
-	float temperature = TMP102_readTemp(tmp);
+		while(true)
+		{
+			CSM_doControl(stateMachine, tmp);
+		}
 
-	PRINTF("Temperature:%f\n\r",temperature);
-
-
-
-
-
-
-
-
-
-
-
+	}
+	else
+	{
+		Logger_logString(logger, "POST Failed", "main", STATUS_LEVEL);
+	}
+#endif
 
 }
+
+bool POST(void)
+{
+	RGBLED_set(led, true, false, false);
+	delayMilliseconds(500);
+	RGBLED_set(led, false, true, false);
+	delayMilliseconds(500);
+	RGBLED_set(led, false, false, true);
+	delayMilliseconds(500);
+	RGBLED_set(led, false, false, false);
+
+
+	return TMP102_isConnected(tmp);
+
+}
+
+
+

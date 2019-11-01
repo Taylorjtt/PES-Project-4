@@ -20,6 +20,7 @@
 #define PROJECT_4_H_
 #define FREEDOM
 #include <stdio.h>
+#include "util.h"
 #include <stdlib.h>
 #include "board.h"
 #include "peripherals.h"
@@ -31,6 +32,8 @@
 #include "Logger/logger.h"
 #include "I2C/I2C.h"
 #include "TMP102/TMP102.h"
+#include "Tests/Tests.h"
+#include "StateMachine/ClassicStateMachine.h"
 
 #define RED_BASE GPIOB
 #define RED_PIN 18U
@@ -42,5 +45,9 @@
 #define BLUE_PIN 1U
 extern LoggerHandle logger;
 extern RGBLEDHandle led;
+extern TMP102Handle tmp;
+
+
+bool POST(void);
 
 #endif /* PROJECT_4_H_ */

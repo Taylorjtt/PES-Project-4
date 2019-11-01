@@ -20,11 +20,13 @@
 #define TMP102_TMP102_H_
 #include <stdbool.h>
 #include "../I2C/I2C.h"
+#include "../Logger/logger.h"
 
 typedef struct _TMP102_OBJ_
 {
 	volatile I2CHandle i2cHandle;
 	uint16_t address;
+	LoggerHandle logger;
 
 }TMP102_OBJ;
 
@@ -41,7 +43,7 @@ typedef enum {LOW_THRESHOLD,HIGH_THRESHOLD}THRESHOLD_T;
 #define T_HIGH_REGISTER 0x03
 
 typedef struct _TMP102_OBJ_ *TMP102Handle;
-TMP102Handle TMP102_Constructor(void * pmemory, const size_t numBytes,I2CHandle i2cHandle, uint16_t address);
+TMP102Handle TMP102_Constructor(void * pmemory, const size_t numBytes,I2CHandle i2cHandle, uint16_t address, LoggerHandle logger);
 float TMP102_readTemp(TMP102Handle handle);
 void TMP102_sleep(TMP102Handle handle);
 void TMP102_wakeup(TMP102Handle handle);
@@ -55,6 +57,7 @@ void TMP102_setFaultNumber(TMP102Handle handle,NUMBER_OF_FAULTS numberOfFaults);
 void TMP102_setAlertMode(TMP102Handle handle,ALERT_MODE alertMode);
 
 void TMP102_openPointerRegister(TMP102Handle handle,uint8_t pointerRegister);
-void TMP102_readRegister(TMP102Handle handle,uint8_t registerAddress,uint8_t * buffer);
+bool TMP102_readRegister(TMP102Handle handle,uint8_t registerAddress,uint8_t * buffer);
+bool TMP102_isConnected(TMP102Handle handle);
 
 #endif /* TMP102_TMP102_H_ */

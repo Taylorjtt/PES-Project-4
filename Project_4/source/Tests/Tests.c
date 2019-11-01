@@ -6,15 +6,6 @@
  */
 #include "Tests.h"
 
-I2CHandle i2c;
-TMP102Handle tmp;
-RGBLEDHandle led;
-
-int main(void) {
-	init();
-	testTMP();
-
-}
 void printBuffer(uint8_t * buffer)
 {
 	PRINTF("buffer[0]: 0x%X\n\r",buffer[0]);
@@ -95,22 +86,4 @@ void testTMP(void)
 
 	UCUNIT_TestcaseEnd();
 }
-void init(void)
-{
-  	/* Init board hardware. */
-    BOARD_InitBootPins();
-    BOARD_InitBootClocks();
-    BOARD_InitBootPeripherals();
-  	/* Init FSL debug console. */
-    BOARD_InitDebugConsole();
-	UCUNIT_Init(); /* initialize framework */
 
-	led = malloc(sizeof(RGBLEDObject));
-	led = RGBLED_Constructor((void*) led, sizeof(RGBLEDObject), RED_BASE, RED_PIN, GREEN_BASE, GREEN_PIN, BLUE_BASE, BLUE_PIN);
-	RGBLED_set(led, false, false, false);
-
-	i2c = I2C_init((void*)I2C_0_BASE_ADDRESS, sizeof(I2C_OBJ));
-
-	tmp = malloc(sizeof(TMP102_OBJ));
-	tmp = TMP102_Constructor((void *)tmp, sizeof(TMP102_OBJ), i2c, 0x48);
-}
