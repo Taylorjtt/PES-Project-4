@@ -29,10 +29,11 @@ typedef struct _TMP102_OBJ_
 }TMP102_OBJ;
 
 typedef enum { QUARTER_HZ,ONE_HZ, FOUR_HZ, EIGHT_HZ}CONVERSION_RATE;
-typedef enum {EXTENDED_MODE_ENABLED,EXTENDED_MODE_DISABLED}EXTENDED_MODE;
+typedef enum {EXTENDED_MODE_DISABLED,EXTENDED_MODE_ENABLED}EXTENDED_MODE;
 typedef enum {ACTIVE_LOW,ACTIVE_HIGH}ALERT_POLARITY;
 typedef enum {ONE_FAULT,TWO_FAULTS,FOUR_FAULTS,SIX_FAULTS}NUMBER_OF_FAULTS;
 typedef enum {COMPARATOR_MODE,THERMOSTAT_MODE}ALERT_MODE;
+typedef enum {LOW_THRESHOLD,HIGH_THRESHOLD}THRESHOLD_T;
 
 #define TEMPERATURE_REGISTER 0x00
 #define CONFIG_REGISTER 0x01
@@ -45,15 +46,13 @@ float TMP102_readTemp(TMP102Handle handle);
 void TMP102_sleep(TMP102Handle handle);
 void TMP102_wakeup(TMP102Handle handle);
 bool TMP102_alert(TMP102Handle handle);
-void TMP102_setLowTemp(TMP102Handle handle);
-void TMP102_setHighTemp(TMP102Handle handle);
-float TMP102_readLowTemp(TMP102Handle handle);
-float TMP102_readHighTemp(TMP102Handle handle);
+void TMP102_setThreshold(TMP102Handle handle,THRESHOLD_T thresholdType, float temperature);
+float TMP102_readTempThreshold(TMP102Handle handle, THRESHOLD_T thresholdType);
 void TMP102_setConversionRate(TMP102Handle handle,CONVERSION_RATE conversionRate);
 void TMP102_setExtendedMode(TMP102Handle handle, EXTENDED_MODE extendedMode);
-void TMP102_setAlterPolarity(TMP102Handle handle,ALERT_POLARITY alertPolarity);
+void TMP102_setAlertPolarity(TMP102Handle handle,ALERT_POLARITY alertPolarity);
 void TMP102_setFaultNumber(TMP102Handle handle,NUMBER_OF_FAULTS numberOfFaults);
-void TMP102_setAltertType(TMP102Handle handle,ALERT_MODE alertMode);
+void TMP102_setAlertMode(TMP102Handle handle,ALERT_MODE alertMode);
 
 void TMP102_openPointerRegister(TMP102Handle handle,uint8_t pointerRegister);
 void TMP102_readRegister(TMP102Handle handle,uint8_t registerAddress,uint8_t * buffer);

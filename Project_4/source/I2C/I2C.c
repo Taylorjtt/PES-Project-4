@@ -153,7 +153,7 @@ void I2C_ReadRegisters(I2CHandle handle, uint8_t address,uint8_t startRegisterAd
 	i2c->DATA = I2C_READ_ADDRESS(address);
 	I2C_WAIT
 
-	I2C_EnterReceiveModeWithoutAck(handle);
+	I2C_EnterReceiveModeWithAck(handle);
 
 	I2C_driveClock(handle);
 
@@ -197,6 +197,12 @@ void I2C_EnterReceiveModeWithoutAck(I2CHandle handle)
 	reg &= ~((1 << I2C_C1_TX_SHIFT) & I2C_C1_TX_MASK);
 	reg |=  ((1 << I2C_C1_TXAK_SHIFT) & I2C_C1_TXAK_MASK);
 	i2c->CONTROL_1 = reg;
+}
+void I2C_EnterReceiveModeWithAck(I2CHandle handle)
+{
+	I2C_OBJ *i2c = (I2C_OBJ *)handle;
+	I2C0->C1 &= ~((1 << I2C_C1_TX_SHIFT) & I2C_C1_TX_MASK)
+			& ~((1 << I2C_C1_TXAK_SHIFT) & I2C_C1_TXAK_MASK);
 }
 void I2C_sendRepeatedStart(I2CHandle handle)
 {

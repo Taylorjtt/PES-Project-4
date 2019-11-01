@@ -24,6 +24,7 @@
 #define I2C_0_BASE_ADDRESS (0x40066000u)
 #define I2C_1_BASE_ADDRESS (0x40067000u)
 ///https://github.com/sunsided/frdm-kl25z-marg-fusion/blob/master/frdm-kl25z-acc-uart/Project_Headers/i2c/i2c.h
+//https://github.com/sunsided/frdm-kl25z-marg-fusion/blob/master/frdm-kl25z-acc-uart/Sources/i2c/i2c.c
 __STATIC_INLINE void I2C_WaitWhileBusy()
 {
 	while((I2C0->S & I2C_S_BUSY_MASK)!=0) {}
@@ -79,5 +80,6 @@ void I2C_sendRepeatedStart(I2CHandle handle);
 void I2C_EnterReceiveModeWithoutAck(I2CHandle handle);
 uint8_t I2C_driveClock(I2CHandle handle);
 void I2C_DisableAck(I2CHandle handle);
+void I2C_EnterReceiveModeWithAck(I2CHandle handle);
 
 #endif /* I2C_I2C_H_ */

@@ -32,7 +32,7 @@ int main(void) {
 	i2c = I2C_init((void*)I2C_0_BASE_ADDRESS, sizeof(I2C_OBJ));
 
 	tmp = malloc(sizeof(TMP102_OBJ));
-	tmp = TMP102_Constructor((void *)tmp, sizeof(RGBLEDObject), i2c, 0x48);
+	tmp = TMP102_Constructor((void *)tmp, sizeof(TMP102_OBJ), i2c, 0x48);
 
 
 	TMP102_wakeup(tmp);
