@@ -35,11 +35,6 @@ TMP102Handle TMP102_Constructor(void * pmemory, const size_t numBytes,I2CHandle 
 
 }
 
-void TMP102_openPointerRegister(TMP102Handle handle,uint8_t pointerRegister)
-{
-	TMP102_OBJ *tmp = (TMP102_OBJ *)handle;
-	I2C_command(tmp->i2cHandle,tmp->address, pointerRegister);
-}
 bool TMP102_readRegister(TMP102Handle handle,uint8_t registerAddress,uint8_t * buffer)
 {
 	TMP102_OBJ *tmp = (TMP102_OBJ *)handle;

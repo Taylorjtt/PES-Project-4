@@ -100,7 +100,11 @@ bool POST(void)
 
 void PORTA_IRQHandler(void)
 {
-	alarm = true;
+
+	if(GPIO_GetPinsInterruptFlags(GPIOA) & 0x1 << 12)
+	{
+		alarm = true;
+	}
 	GPIO_ClearPinsInterruptFlags(GPIOA, 0x01<<12);
 
 }

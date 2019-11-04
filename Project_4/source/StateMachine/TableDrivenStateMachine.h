@@ -22,6 +22,16 @@ struct tableEntry
 };
 extern struct tableEntry stateTable[];
 
+/**
+* @brief Control function for the TBSM
+*
+* @param currentState		the CSM Pointer
+* @param tmp		temp sensor handle
+* @param logger		logger handle
+* @param led		led handle
+*
+* @return table entry for next state
+*/
 struct tableEntry* doCurrentState(struct tableEntry* currentState, TMP102Handle tmp, LoggerHandle logger, RGBLEDHandle led);
 
 

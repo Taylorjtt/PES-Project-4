@@ -31,7 +31,29 @@ typedef struct _CSM_OBJ_
 }CSM_OBJ;
 typedef struct _CSM_OBJ_ *CSMHandle;
 
+/**
+* @brief Constructor for Classic State Machine Object
+*
+* Given a chunk of memory, the size of an CSM_OBJ object and the necessary modules return a pointer to the object
+*
+* @param pmemory	The pointer to the memory that this object will use
+* @param numbytes	The expected size of the object
+*
+* @param logger		logger to be used with the object
+* @param led  		led to be used with the project
+*
+*
+* @return CSMHandle a pointer to an _CSM_OBJ_
+*/
 CSMHandle CSM_Contstructor(void * pmemory, const size_t numBytes, LoggerHandle logger, RGBLEDHandle led);
+/**
+* @brief Control function for the CSM
+*
+* @param handle		the CSM Pointer
+* @param tmp		temp sensor handle
+*
+* @return STATE indicating if the statemachine is done
+*/
 STATE CSM_doControl(CSMHandle handle,TMP102Handle tmp);
 
 #endif /* STATEMACHINE_CLASSICSTATEMACHINE_H_ */
