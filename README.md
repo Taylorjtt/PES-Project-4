@@ -13,17 +13,17 @@ I always forget that when addressing an I2C device you need to shift the slave a
 2. Import it into MCUXpresso IDE
 3. You should be able to run the project easily since we aren't doing any weird cross compilation
 ### Modes
-To run normal mode the top of Project_4.c should look like
+To run normal mode the top of  mode.h should look like
 ~~~
 //#define TEST
 //#define DB
 ~~~
-To run Debug  mode the top of Project_4.c should look like
+To run Debug  mode the top of mode.h should look like
 ~~~
 //#define TEST
 #define DB
 ~~~
-To run the test suite  the top of Project_4.c should look like
+To run the test suite  the top of  mode.h should look like
 ~~~
 #define TEST
 //#define DB
