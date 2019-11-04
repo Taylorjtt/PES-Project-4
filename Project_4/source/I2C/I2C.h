@@ -26,6 +26,11 @@
 #define I2C_1_BASE_ADDRESS (0x40067000u)
 ///https://github.com/sunsided/frdm-kl25z-marg-fusion/blob/master/frdm-kl25z-acc-uart/Project_Headers/i2c/i2c.h
 //https://github.com/sunsided/frdm-kl25z-marg-fusion/blob/master/frdm-kl25z-acc-uart/Sources/i2c/i2c.c
+
+
+/**
+* @brief function to wait while the i2c peripheral is busy
+*/
 __STATIC_INLINE void I2C_WaitWhileBusy()
 {
 	uint32_t i = 0;
@@ -39,25 +44,22 @@ __STATIC_INLINE void I2C_WaitWhileBusy()
 	}
 
 }
+/**
+* @brief macro to convert an i2c address to a write address
+*/
 #define I2C_WRITE_ADDRESS(slaveAddress) 	((uint8_t)((slaveAddress << 1) | 0))
+/**
+* @brief macro to convert an i2c address to a read address
+*/
+
 #define I2C_READ_ADDRESS(slaveAddress) 	((uint8_t)((slaveAddress << 1) | 1))
 #define I2C_ENABLE_BIT 1 << 7
-#define I2C_IR_ENABLE_BIT 1 << 6
-#define I2C_MODE_BIT 1 << 5
-#define I2C_TRANSMIT_MODE_BIT 1 << 4
-#define I2C_TRANS_ACK_ENABLE_BIT 1 << 3
-#define I2C_RSTART_BIT 1 << 2
-#define I2C_WAKEUP_EN_BIT 1 << 1
-#define I2C_DMA_EN_BIT 1 << 0
-#define I2C_WAIT while((I2C0->S & I2C_S_IICIF_MASK) == 0){} \
-		I2C0->S |= I2C_S_IICIF_MASK;
-
-
-#define I2C_DRIVE_BIT 1 << 5
-
 #define FREQUENCY_ICR(x)  (x) & (0x3F)
 #define FREQUENCY_MULT(x)  (x << 6) & (0xC0)
 
+/**
+* @brief struct representing the i2c peripheral
+*/
 typedef struct _I2C_Obj_
 {
 	__IO uint8_t ADRESS_1;
@@ -77,21 +79,98 @@ typedef struct _I2C_Obj_
 }I2C_OBJ;
 
 typedef struct _I2C_Obj_ *I2CHandle;
+/**
+* @brief Constructor for I2C object
+*
+
+* @param pmemory	The pointer to the memory that this object will use
+* @param numbytes	The expected size of the object
+*
+*
+* @return I2CHandle a pointer to an I2C_OBJ
+*/
 I2CHandle I2C_init(void *pmemory, const size_t numBytes);
-void I2C_command(I2CHandle handle, uint8_t address,uint8_t data);
-void I2C_writeByte(I2CHandle handle, uint8_t address,uint8_t reg,uint8_t data);
+/**
+* @brief write a certain number of bytes to the i2c object
+*
+
+* @param handle		handle of the object
+* @param address	address to write to
+* @param reg		register to write to
+* @param data		array of byte data to write
+* @param length		how many bytes to write
+*
+* @return boolean indicating if write was succesfull
+*/
 bool I2C_writeBytes(I2CHandle handle, uint8_t address,uint8_t reg,uint8_t* data, size_t length);
+
+/**
+* @brief send a start condition
+*
+
+* @param handle		handle of the object
+* @param address	address to write to
+*
+*/
 void I2C_start(I2CHandle handle, uint8_t address);
+
+/**
+* @brief send a stop condition
+*
+
+* @param handle		handle of the object
+*
+*/
 void I2C_stop(I2CHandle handle);
 
-void I2C_write(I2CHandle handle,uint8_t data);
+/**
+* @brief read registers from an i2c device
+*
+
+* @param handle						handle of the object
+* @param address					address to write to
+* @param startRegisterAddress		register to start reading at
+* @param registerCount				how many registers to read
+* @param buffer						buffer to store read data
+*
+* @return boolean indicating if write was succesfull
+*/
 bool I2C_ReadRegisters(I2CHandle handle, uint8_t address,uint8_t startRegisterAddress, uint8_t registerCount, uint8_t*  buffer);
-uint8_t I2C_readRegister(I2CHandle handle, uint8_t address, uint8_t registerAddress);
+/**
+* @brief send a repeated start condition
+*
+* @param handle		handle of the object
+*
+*/
 void I2C_sendRepeatedStart(I2CHandle handle);
-void I2C_EnterReceiveModeWithoutAck(I2CHandle handle);
+
+/**
+* @brief read data to drive the clock
+*
+* @param handle		handle of the object
+*
+*/
 uint8_t I2C_driveClock(I2CHandle handle);
+/**
+* @brief disable ack
+*
+* @param handle		handle of the object
+*
+*/
 void I2C_DisableAck(I2CHandle handle);
+/**
+* @brief enable recieve mode with Ack
+*
+* @param handle		handle of the object
+*
+*/
 void I2C_EnterReceiveModeWithAck(I2CHandle handle);
+/**
+* @brief wait for the i2c interrupt flag
+*
+* @param handle		handle of the object
+*
+*/
 bool I2C_wait(I2CHandle handle);
 
 #endif /* I2C_I2C_H_ */
