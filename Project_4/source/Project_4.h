@@ -34,6 +34,8 @@
 #include "TMP102/TMP102.h"
 #include "Tests/Tests.h"
 #include "StateMachine/ClassicStateMachine.h"
+#include "StateMachine/TableDrivenStateMachine.h"
+
 
 #define RED_BASE GPIOB
 #define RED_PIN 18U

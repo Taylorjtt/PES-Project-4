@@ -7,7 +7,7 @@
 #include "Project_4.h"
 
 //#define TEST
-#define DEBUG
+//#define DB
 #define TMP102_ADDRESS 0x48
 LoggerHandle logger;
 RGBLEDHandle led;
@@ -22,6 +22,10 @@ int main(void) {
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
     BOARD_InitDebugConsole();
+
+    EnableInterrupts;
+    EnableIRQ(PORTA_IRQn);
+
     /*
      * The board is running at 48MZ therefore 480 ticks equals 10 microsecond
      */
@@ -40,8 +44,12 @@ int main(void) {
 
 	tmp = malloc(sizeof(TMP102_OBJ));
 	tmp = TMP102_Constructor((void *)tmp, sizeof(TMP102_OBJ), i2c, TMP102_ADDRESS, logger);
+	TMP102_setAlertPolarity(tmp, ACTIVE_HIGH);
+	TMP102_setAlertMode(tmp, COMPARATOR_MODE);
+	TMP102_setThreshold(tmp, HIGH_THRESHOLD, 0);
+	TMP102_setThreshold(tmp, LOW_THRESHOLD, 0);
 	stateMachine = malloc(sizeof(CSM_OBJ));
-	stateMachine = CSM_Contstructor((void *)stateMachine, sizeof(CSM_OBJ), logger);
+	stateMachine = CSM_Contstructor((void *)stateMachine, sizeof(CSM_OBJ), logger,led);
 
 #ifdef TEST
 	testTMP();
@@ -53,9 +61,21 @@ int main(void) {
 
 		while(true)
 		{
-			CSM_doControl(stateMachine, tmp);
+			Logger_logString(logger, "Entering classic state machine", "main", STATUS_LEVEL);
+			while(true)
+			{
+				if(CSM_doControl(stateMachine, tmp) == DONE)
+					break;
+			}
+			Logger_logString(logger, "Entering table based machine", "main", STATUS_LEVEL);
+			struct tableEntry* entry = &stateTable[0];
+			while(true)
+			{
+				entry = doCurrentState(entry, tmp, logger, led);
+				if(entry->currentState == DONE)
+					break;
+			}
 		}
-
 	}
 	else
 	{
@@ -74,11 +94,15 @@ bool POST(void)
 	RGBLED_set(led, false, false, true);
 	delayMilliseconds(500);
 	RGBLED_set(led, false, false, false);
-
-
 	return TMP102_isConnected(tmp);
 
 }
 
+void PORTA_IRQHandler(void)
+{
+	alarm = true;
+	GPIO_ClearPinsInterruptFlags(GPIOA, 0x01<<12);
+
+}
 
 

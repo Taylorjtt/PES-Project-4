@@ -57,16 +57,16 @@ void Logger_logData(LoggerHandle handle, uint8_t* loc, size_t length,const char*
 		{
 			uintptr_t address = (uintptr_t)(loc + i);
 			#ifdef FREEDOM
-			PRINTF("November 1, 2019 6:00:03 In function %s()\n\r",function);
+			PRINTF("In function %s()\n\r",function);
 			PRINTF("%s: Address: %02X\tData:%X\n\r",getLevelString(level),address,loc[i]);
 			#else
 			printf("LOGGER: Address: %02X\tData:%X\n\r",(uint32_t)address,loc[i]);
 			#endif
 		}
 		#ifdef FREEDOM
-			PRINTF("\n\r\n\r");
+			PRINTF("\n\r");
 		#else
-			printf("\n\r\n\r");
+			printf("\n\r");
 		#endif
 	}
 }
@@ -75,18 +75,46 @@ void Logger_logString(LoggerHandle handle, const char * string,const char* funct
 	LOGGERObject *obj = (LOGGERObject *)handle;
 	if(obj->status == ENABLED)
 	{
-		PRINTF("November 1, 2019 6:00:03 In function %s()\n\r",function);
-		PRINTF("%s: %s\n\r\n\r",getLevelString(level),string);
+		PRINTF("In function %s()\n\r",function);
+		PRINTF("%s: %s\n\r",getLevelString(level),string);
 	}
 }
+void Logger_logTemps(LoggerHandle handle, float currentTemp,float averageTemp,const char* function, LOG_LEVEL level)
+{
+	LOGGERObject *obj = (LOGGERObject *)handle;
+	if(obj->status == ENABLED)
+	{
+
+
+		PRINTF("In function %s()\n\r",function);
+		if(averageTemp > 0 && currentTemp > 0)
+		{
+			PRINTF("%s: Current Temp: %f C\t Average Temp %f C\n\r",getLevelString(level),currentTemp,averageTemp);
+		}
+		if(averageTemp > 0 && currentTemp < 0)
+		{
+			PRINTF("%s: Current Temp: -%f C\t Average Temp %f C\n\r",getLevelString(level),currentTemp,averageTemp);
+		}
+		if(averageTemp < 0 && currentTemp > 0)
+		{
+			PRINTF("%s: Current Temp: %f C\t Average Temp -%f C\n\r",getLevelString(level),currentTemp,averageTemp);
+		}
+		if(averageTemp <= 0 && currentTemp <= 0)
+		{
+			PRINTF("%s: Current Temp: -%f C\t Average Temp -%f C\n\r",getLevelString(level),currentTemp,averageTemp);
+		}
+
+	}
+}
+
 
 void Logger_logInt(LoggerHandle handle, uint8_t num,const char* function, LOG_LEVEL level)
 {
 	LOGGERObject *obj = (LOGGERObject *)handle;
 	if(obj->status == ENABLED)
 	{
-		PRINTF("November 1, 2019 6:00:03 In function %s()\n\r",function);
-		PRINTF("%s: %d\n\r\n\r",getLevelString(level),num);
+		PRINTF("In function %s()\n\r",function);
+		PRINTF("%s: %d\n\r",getLevelString(level),num);
 	}
 }
 const char* getLevelString(LOG_LEVEL level)

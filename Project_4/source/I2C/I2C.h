@@ -28,7 +28,16 @@
 //https://github.com/sunsided/frdm-kl25z-marg-fusion/blob/master/frdm-kl25z-acc-uart/Sources/i2c/i2c.c
 __STATIC_INLINE void I2C_WaitWhileBusy()
 {
-	while((I2C0->S & I2C_S_BUSY_MASK)!=0) {}
+	uint32_t i = 0;
+	while((I2C0->S & I2C_S_BUSY_MASK)!=0)
+	{
+		i++;
+		if(i > 100000)
+		{
+			break;
+		}
+	}
+
 }
 #define I2C_WRITE_ADDRESS(slaveAddress) 	((uint8_t)((slaveAddress << 1) | 0))
 #define I2C_READ_ADDRESS(slaveAddress) 	((uint8_t)((slaveAddress << 1) | 1))

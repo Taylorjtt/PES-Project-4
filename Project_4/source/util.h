@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#define EnableInterrupts asm(" CPSIE i");
+#define DisableInterrupts asm(" CPSID i");
 extern uint32_t usecs;
 void delayMilliseconds(uint32_t delay);
 #endif /* UTIL_H_ */

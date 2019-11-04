@@ -21,6 +21,13 @@
 #include <stdbool.h>
 #include "../I2C/I2C.h"
 #include "../Logger/logger.h"
+typedef enum { QUARTER_HZ,ONE_HZ, FOUR_HZ, EIGHT_HZ}CONVERSION_RATE;
+typedef enum {EXTENDED_MODE_DISABLED,EXTENDED_MODE_ENABLED}EXTENDED_MODE;
+typedef enum {ACTIVE_LOW,ACTIVE_HIGH}ALERT_POLARITY;
+typedef enum {ONE_FAULT,TWO_FAULTS,FOUR_FAULTS,SIX_FAULTS}NUMBER_OF_FAULTS;
+typedef enum {COMPARATOR_MODE,THERMOSTAT_MODE}ALERT_MODE;
+typedef enum {LOW_THRESHOLD,HIGH_THRESHOLD}THRESHOLD_T;
+
 
 typedef struct _TMP102_OBJ_
 {
@@ -30,12 +37,7 @@ typedef struct _TMP102_OBJ_
 
 }TMP102_OBJ;
 
-typedef enum { QUARTER_HZ,ONE_HZ, FOUR_HZ, EIGHT_HZ}CONVERSION_RATE;
-typedef enum {EXTENDED_MODE_DISABLED,EXTENDED_MODE_ENABLED}EXTENDED_MODE;
-typedef enum {ACTIVE_LOW,ACTIVE_HIGH}ALERT_POLARITY;
-typedef enum {ONE_FAULT,TWO_FAULTS,FOUR_FAULTS,SIX_FAULTS}NUMBER_OF_FAULTS;
-typedef enum {COMPARATOR_MODE,THERMOSTAT_MODE}ALERT_MODE;
-typedef enum {LOW_THRESHOLD,HIGH_THRESHOLD}THRESHOLD_T;
+
 
 #define TEMPERATURE_REGISTER 0x00
 #define CONFIG_REGISTER 0x01
@@ -55,7 +57,6 @@ void TMP102_setExtendedMode(TMP102Handle handle, EXTENDED_MODE extendedMode);
 void TMP102_setAlertPolarity(TMP102Handle handle,ALERT_POLARITY alertPolarity);
 void TMP102_setFaultNumber(TMP102Handle handle,NUMBER_OF_FAULTS numberOfFaults);
 void TMP102_setAlertMode(TMP102Handle handle,ALERT_MODE alertMode);
-
 void TMP102_openPointerRegister(TMP102Handle handle,uint8_t pointerRegister);
 bool TMP102_readRegister(TMP102Handle handle,uint8_t registerAddress,uint8_t * buffer);
 bool TMP102_isConnected(TMP102Handle handle);

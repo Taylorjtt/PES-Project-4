@@ -89,5 +89,6 @@ void Logger_logString(LoggerHandle handle, const char * string, const char* func
 */
 void Logger_logInt(LoggerHandle handle, uint8_t num, const char* function,LOG_LEVEL level);
 
+void Logger_logTemps(LoggerHandle handle, float currentTemp,float averageTemp,const char* function, LOG_LEVEL level);
 const char* getLevelString(LOG_LEVEL);
 #endif /* LOGGER_LOGGER_H_ */
