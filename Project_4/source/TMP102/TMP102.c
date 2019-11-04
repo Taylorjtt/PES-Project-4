@@ -42,7 +42,7 @@ bool TMP102_readRegister(TMP102Handle handle,uint8_t registerAddress,uint8_t * b
 	{
 		#ifdef DB
 		char str[100];
-		snprintf(str, sizeof(str),"Register address 0x%X:\tHigh: 0x%X Low:0x%X",registerAddress,buffer[1],buffer[0]);
+		snprintf(str, sizeof(str),"Register address 0x%X:\tByte 1: 0x%X Byte 2:0x%X",registerAddress,buffer[1],buffer[0]);
 		Logger_logString(tmp->logger, str, "TMP102_readRegister", DEBUG_LEVEL);
 		#endif
 		return true;

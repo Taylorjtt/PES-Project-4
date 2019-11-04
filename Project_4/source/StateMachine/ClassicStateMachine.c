@@ -55,14 +55,12 @@ STATE CSM_doControl(CSMHandle handle,TMP102Handle tmp)
 				obj->currentState = DISCONNECTED;
 			}
 
-
+			DisableIRQ(PORTA_IRQn);
 			break;
 		}
 		case WAIT:
 		{
-			DisableIRQ(PORTA_IRQn);
 			RGBLED_set(obj->led, false, true, false);
-
 			if(TMP102_isConnected(tmp))
 			{
 				Logger_logString(obj->logger, "Entered WAIT state", "CSM_doControl", STATUS_LEVEL);
@@ -71,7 +69,7 @@ STATE CSM_doControl(CSMHandle handle,TMP102Handle tmp)
 				obj->averageCount++;
 
 				Logger_logTemps(obj->logger, obj->currentTemp, obj->average, "CSM_doControl", STATUS_LEVEL);
-				delayMilliseconds(5000);
+				delayMilliseconds(DELAY);
 				obj->currentState = READ_TEMP;
 				if(obj->averageCount == 4)
 				{
@@ -97,14 +95,21 @@ STATE CSM_doControl(CSMHandle handle,TMP102Handle tmp)
 			if(TMP102_isConnected(tmp))
 			{
 				obj->currentTemp = TMP102_readTemp(tmp);
-				obj->currentState = WAIT;
+				if(obj->currentTemp > 0)
+				{
+					obj->currentState = WAIT;
+				}
+				else
+				{
+					obj->currentState = ALERT;
+				}
+
 			}
 			else
 			{
 				obj->currentState = DISCONNECTED;
 			}
-			delayMilliseconds(1000);
-			EnableIRQ(PORTA_IRQn);
+			delayMilliseconds(DELAY);
 			break;
 		}
 		case DISCONNECTED:

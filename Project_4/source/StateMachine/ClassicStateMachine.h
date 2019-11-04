@@ -15,6 +15,7 @@
 #include <Logger/logger.h>
 #include "LED/RGB.h"
 #include "MKL25Z4.h"
+#define DELAY 15000
 extern bool alarm;
 typedef enum {READ_TEMP,WAIT,ALERT,DISCONNECTED, DONE}STATE;
 typedef struct _CSM_OBJ_

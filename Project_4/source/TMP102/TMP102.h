@@ -21,6 +21,7 @@
 #include <stdbool.h>
 #include "../I2C/I2C.h"
 #include "../Logger/logger.h"
+#include "mode.h"
 typedef enum { QUARTER_HZ,ONE_HZ, FOUR_HZ, EIGHT_HZ}CONVERSION_RATE;
 typedef enum {EXTENDED_MODE_DISABLED,EXTENDED_MODE_ENABLED}EXTENDED_MODE;
 typedef enum {ACTIVE_LOW,ACTIVE_HIGH}ALERT_POLARITY;

@@ -44,8 +44,9 @@ struct tableEntry* doCurrentState(struct tableEntry* currentState, TMP102Handle 
 	else if(currentState->currentState == WAIT)
 	{
 		DisableIRQ(PORTA_IRQn);
-		Logger_logString(logger, "Entered WAIT state", "doCurrentState", STATUS_LEVEL);
 		RGBLED_set(led, false, true, false);
+		Logger_logString(logger, "Entered WAIT state", "doCurrentState", STATUS_LEVEL);
+
 		if(TMP102_isConnected(tmp))
 		{
 			total += currentTemp;
@@ -53,7 +54,8 @@ struct tableEntry* doCurrentState(struct tableEntry* currentState, TMP102Handle 
 			averageCount++;
 
 			Logger_logTemps(logger, currentTemp,average, "doCurrentState", STATUS_LEVEL);
-			delayMilliseconds(5000);
+			delayMilliseconds(DELAY);
+
 			if(averageCount == 4)
 			{
 				average = 0;
@@ -61,6 +63,7 @@ struct tableEntry* doCurrentState(struct tableEntry* currentState, TMP102Handle 
 				total = 0.0f;
 				return &stateTable[DONE];
 			}
+
 			return &stateTable[currentState->timeout];
 		}
 		else
@@ -76,15 +79,23 @@ struct tableEntry* doCurrentState(struct tableEntry* currentState, TMP102Handle 
 
 		if(TMP102_isConnected(tmp))
 		{
+			delayMilliseconds(DELAY);
 			currentTemp = TMP102_readTemp(tmp);
-			return &stateTable[currentState->complete];
+			if(currentTemp > 0)
+			{
+				return &stateTable[currentState->complete];
+			}
+			else
+			{
+				return &stateTable[currentState->currentState];
+			}
+
 		}
 		else
 		{
 			return &stateTable[currentState->disconnect];
 		}
-		delayMilliseconds(1000);
-		EnableIRQ(PORTA_IRQn);
+
 	}
 	else if(currentState->currentState == DISCONNECTED)
 	{

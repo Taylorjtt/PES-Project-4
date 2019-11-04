@@ -75,6 +75,7 @@ void Logger_logString(LoggerHandle handle, const char * string,const char* funct
 	LOGGERObject *obj = (LOGGERObject *)handle;
 	if(obj->status == ENABLED)
 	{
+		PRINTF("------------------------------------------------------------------\n\r");
 		PRINTF("In function %s()\n\r",function);
 		PRINTF("%s: %s\n\r",getLevelString(level),string);
 	}
@@ -85,23 +86,23 @@ void Logger_logTemps(LoggerHandle handle, float currentTemp,float averageTemp,co
 	if(obj->status == ENABLED)
 	{
 
-
+		PRINTF("------------------------------------------------------------------\n\r");
 		PRINTF("In function %s()\n\r",function);
 		if(averageTemp > 0 && currentTemp > 0)
 		{
-			PRINTF("%s: Current Temp: %f C\t Average Temp %f C\n\r",getLevelString(level),currentTemp,averageTemp);
+			PRINTF("%s: Temperature Reading\n\rCurrent Temp: %f C\n\rAverage Temp %f C\n\r",getLevelString(level),currentTemp,averageTemp);
 		}
 		if(averageTemp > 0 && currentTemp < 0)
 		{
-			PRINTF("%s: Current Temp: -%f C\t Average Temp %f C\n\r",getLevelString(level),currentTemp,averageTemp);
+			PRINTF("%s: Temperature Reading\n\rCurrent Temp: -%f C\n\rAverage Temp %f C\n\r",getLevelString(level),currentTemp,averageTemp);
 		}
 		if(averageTemp < 0 && currentTemp > 0)
 		{
-			PRINTF("%s: Current Temp: %f C\t Average Temp -%f C\n\r",getLevelString(level),currentTemp,averageTemp);
+			PRINTF("%s: Temperature Reading\n\rCurrent Temp: %f C\n\rAverage Temp -%f C\n\r",getLevelString(level),currentTemp,averageTemp);
 		}
 		if(averageTemp <= 0 && currentTemp <= 0)
 		{
-			PRINTF("%s: Current Temp: -%f C\t Average Temp -%f C\n\r",getLevelString(level),currentTemp,averageTemp);
+			PRINTF("%s: Temperature Reading\n\rCurrent Temp: -%f C\n\rAverage Temp -%f C\n\r",getLevelString(level),currentTemp,averageTemp);
 		}
 
 	}
@@ -113,6 +114,7 @@ void Logger_logInt(LoggerHandle handle, uint8_t num,const char* function, LOG_LE
 	LOGGERObject *obj = (LOGGERObject *)handle;
 	if(obj->status == ENABLED)
 	{
+		PRINTF("------------------------------------------------------------------\n\r");
 		PRINTF("In function %s()\n\r",function);
 		PRINTF("%s: %d\n\r",getLevelString(level),num);
 	}

@@ -6,8 +6,6 @@
 
 #include "Project_4.h"
 
-//#define TEST
-//#define DB
 #define TMP102_ADDRESS 0x48
 LoggerHandle logger;
 RGBLEDHandle led;
@@ -67,6 +65,7 @@ int main(void) {
 				if(CSM_doControl(stateMachine, tmp) == DONE)
 					break;
 			}
+
 			Logger_logString(logger, "Entering table based machine", "main", STATUS_LEVEL);
 			struct tableEntry* entry = &stateTable[0];
 			while(true)

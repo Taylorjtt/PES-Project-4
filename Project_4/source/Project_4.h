@@ -20,6 +20,7 @@
 #define PROJECT_4_H_
 #define FREEDOM
 #include <stdio.h>
+#include "mode.h"
 #include "util.h"
 #include <stdlib.h>
 #include "board.h"
