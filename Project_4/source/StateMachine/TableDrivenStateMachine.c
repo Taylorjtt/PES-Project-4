@@ -79,7 +79,7 @@ struct tableEntry* doCurrentState(struct tableEntry* currentState, TMP102Handle 
 
 		if(TMP102_isConnected(tmp))
 		{
-			delayMilliseconds(DELAY);
+			delayMilliseconds(1000);
 			currentTemp = TMP102_readTemp(tmp);
 			if(currentTemp > 0)
 			{
@@ -103,6 +103,7 @@ struct tableEntry* doCurrentState(struct tableEntry* currentState, TMP102Handle 
 		Logger_logString(logger, "Entered DISCONNECTED state", "doCurrentState", STATUS_LEVEL);
 		exit(0);
 	}
+	return &stateTable[currentState->currentState];
 }
 
 

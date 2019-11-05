@@ -8,8 +8,8 @@
 #ifndef MODE_H_
 #define MODE_H_
 
-//#define TEST
-#define DB
+#define TEST
+//#define DB
 
 
 #endif /* MODE_H_ */

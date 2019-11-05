@@ -109,7 +109,7 @@ STATE CSM_doControl(CSMHandle handle,TMP102Handle tmp)
 			{
 				obj->currentState = DISCONNECTED;
 			}
-			delayMilliseconds(DELAY);
+			delayMilliseconds(1000);
 			break;
 		}
 		case DISCONNECTED:
@@ -122,6 +122,8 @@ STATE CSM_doControl(CSMHandle handle,TMP102Handle tmp)
 		case DONE:
 		{
 			Logger_logString(obj->logger, "Entered DONE state, Should not be here", "CSM_doControl", STATUS_LEVEL);
+			break;
 		}
 	}
+	return obj->currentState;
 }
