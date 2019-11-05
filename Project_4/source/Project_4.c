@@ -79,6 +79,7 @@ int main(void) {
 	else
 	{
 		Logger_logString(logger, "POST Failed", "main", STATUS_LEVEL);
+		RGBLED_set(led, true, false, false);
 	}
 #endif
 
