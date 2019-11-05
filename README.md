@@ -39,7 +39,7 @@ I pattern matched the following references for my I2C code
 https://github.com/sunsided/frdm-kl25z-marg-fusion/blob/master/frdm-kl25z-acc-uart/Project_Headers/i2c/i2c.h
 https://github.com/sunsided/frdm-kl25z-marg-fusion/blob/master/frdm-kl25z-acc-uart/Sources/i2c/i2c.c
 ~~~
-I pattern matched the following references 
+I pattern matched the following references for my tmp code
 ~~~
 https://github.com/sparkfun/Digital_Temperature_Sensor_Breakout_-_TMP102/tree/V_H13.0/Libraries/Arduino/SparkFun_TMP102_Arduino_Library/src
 ~~~
